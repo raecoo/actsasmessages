@@ -1,0 +1,44 @@
+ActsAsMessages
+==============
+ acts_as_messages is a user's internal message plugin can be used on web site or other applications
+
+Example
+=======
+
+Note : @user is current login user  in this case
+
+** create new message and rescue the AR error
+** this a create action
+** params[:title] is message title
+** params[:body] is message body
+
+  def create
+    recipient = User.find_by_name(params[:name])
+    @user.send_message(recipient, params[:title],params[:body])
+    flash[:notice] ='post message success'
+    ..........
+  rescue ActiveRecord::RecordInvalid
+    flash[:notice] = 'post message error'
+    ...........
+  end
+
+** find current_user all inbox message
+@messages = @user.inbox_messages(params[:page])
+
+** find current_user all sents message
+@messages = @user.sent_messages(params[:page])
+
+** find current_user all trash message
+@messages = @user.trash_messages(params[:page])
+
+** show message and mark it's state is read
+   @message = Message.find(params[:id])
+   @message.mark_read
+
+** trash and untrash message
+    @message = Message.find(params[:id])
+    @user.trash_message(@message)
+    @user.untrash_message(@message)
+
+
+Copyright (c) 2008 Raecoo,raecoo@gmail.com , released under the MIT license
